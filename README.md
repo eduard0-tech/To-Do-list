@@ -66,7 +66,3 @@ Siga os passos abaixo para rodar a aplicação na sua máquina.
 
 5.  **Abra no navegador:**
     O projeto estará rodando em `http://localhost:5173`. Abra este endereço no seu navegador para ver a aplicação funcionar!
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT.
