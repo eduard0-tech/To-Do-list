@@ -168,5 +168,30 @@ li.completed .task-text {
 
 .remove-button:hover {
   background-color: #f1f3f5;
-  color: #ff4d6d; /* Vermelho para indicar remoção */
+  color: #ff4d6d;
+}
+
+@media (max-width: 576px) {
+  body {
+    padding: 10px;
+  }
+
+  .app {
+    margin-top: 20px; 
+    padding: 20px; 
+  }
+
+  h1 {
+    font-size: 28px; 
+    margin-bottom: 20px;
+  }
+
+  .input-container {
+    flex-direction: column; 
+    gap: 12px; 
+  }
+
+  .input-container button {
+    width: 100%;
+  }
 }
