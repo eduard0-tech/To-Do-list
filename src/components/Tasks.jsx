@@ -1,6 +1,4 @@
-import React from 'react';
-
-function Tasks({ tasks, newTask, setNewTask, addTask, toggleTask, removeTask }) {
+function Tasks({ tasks, newTask, setNewTask, addTask, toggleTask, removeTask, taskLimitReached }) {
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             addTask();
@@ -16,8 +14,11 @@ function Tasks({ tasks, newTask, setNewTask, addTask, toggleTask, removeTask }) 
                     onChange={(e) => setNewTask(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="O que precisa ser feito?"
+                    disabled={taskLimitReached}
                 />
-                <button onClick={addTask}>Adicionar</button>
+                <button onClick={addTask} disabled={taskLimitReached}>
+                    Adicionar
+                </button>
             </div>
 
             <ul className="task-list">

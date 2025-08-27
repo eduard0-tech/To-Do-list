@@ -1,27 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Tasks from './components/Tasks';
 import './App.css';
 
+function capitalizarPrimeiraLetra(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+const TASK_LIMIT = 10;
+
 function App() {
-  // Armazena a lista de tarefas
-  const [tasks, setTasks] = useState([
-    { text: "Estudar React", completed: false },
-    { text: "Ler um livro", completed: false },
-    { text: "Fazer exercícios", completed: false }
-  ]);
+  const [tasks, setTasks] = useState(() => {
+    // Carrega as tarefas do localStorage na primeira renderização.
+    const savedTasks = localStorage.getItem('tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
   
-  // Armazena o texto da nova tarefa que está sendo digitada
   const [newTask, setNewTask] = useState("");
 
-  // Adiciona uma nova tarefa à lista
+  // Salva as tarefas no localStorage sempre que a lista 'tasks' for alterada.
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
   const addTask = () => {
-    if (!newTask.trim()) return; // Evita adicionar tarefas vazias
-    const newTasksList = [...tasks, { text: newTask, completed: false }];
-    setTasks(newTasksList);
-    setNewTask(""); // Limpa o input após adicionar a tarefa
+    if (tasks.length >= TASK_LIMIT) {
+      alert(`Você não pode adicionar mais de ${TASK_LIMIT} tarefas.`);
+      return;
+    }
+
+    const trimmedTask = newTask.trim();
+    if (!trimmedTask) {
+      alert("Por favor, digite uma tarefa válida.");
+      return;
+    }
+    
+    const formattedTask = capitalizarPrimeiraLetra(trimmedTask);
+
+    setTasks([...tasks, { text: formattedTask, completed: false }]);
+    setNewTask("");
   };
 
-  // Marca ou desmarca uma tarefa como concluída
   const toggleTask = (index) => {
     const updatedTasks = tasks.map((task, i) => 
       i === index ? { ...task, completed: !task.completed } : task
@@ -29,16 +48,19 @@ function App() {
     setTasks(updatedTasks);
   };
 
-  // Remove uma tarefa da lista
   const removeTask = (index) => {
     const filteredTasks = tasks.filter((_, i) => i !== index);
     setTasks(filteredTasks);
   };
 
-  // O App agora renderiza o componente Tasks e passa tudo o que ele precisa via "props"
+  const taskLimitReached = tasks.length >= TASK_LIMIT;
+
   return (
     <div className="app">
-      <h1>To-Do List 📝</h1>
+      <h1>Lista de Tarefas 📝</h1>
+      {taskLimitReached && (
+        <p className="limit-warning">Você atingiu o limite de {TASK_LIMIT} tarefas!</p>
+      )}
       <Tasks
         tasks={tasks}
         newTask={newTask}
@@ -46,6 +68,7 @@ function App() {
         addTask={addTask}
         toggleTask={toggleTask}
         removeTask={removeTask}
+        taskLimitReached={taskLimitReached}
       />
     </div>
   );
