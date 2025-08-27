@@ -175,6 +175,11 @@ li.completed .task-text {
     padding: 10px;
   }
 
+  .input-container input {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
   .app {
     margin-top: 20px; 
     padding: 20px; 
